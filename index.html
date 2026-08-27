@@ -19,15 +19,15 @@
   body{
     margin:0;
     font-family:"Myriad Pro","Myriad","Segoe UI",Helvetica,Arial,sans-serif;
-    background:var(--forbo-bg);
+    background:transparent;
     color:var(--forbo-text);
   }
   .esd-tool{
     max-width:640px;
     margin:0 auto;
     background:var(--forbo-white);
+    border:1px solid var(--forbo-border);
     border-radius:6px;
-    box-shadow:0 2px 14px rgba(35,65,90,0.10);
     overflow:hidden;
   }
   .esd-header{
@@ -114,7 +114,7 @@
   }
   .esd-option:hover{
     border-color:var(--forbo-navy);
-    background:#f6f9fa;
+    background:#fafbfc;
   }
   .esd-option:focus-visible{
     outline:3px solid var(--forbo-focus);
@@ -198,8 +198,8 @@
     display:flex;
     justify-content:space-between;
     align-items:center;
-    background:var(--forbo-bg);
-    border:1px solid var(--forbo-border);
+    background:var(--forbo-white);
+    border:1.5px solid var(--forbo-border);
     border-radius:6px;
     padding:14px 16px;
     text-decoration:none;
@@ -207,7 +207,7 @@
     font-weight:600;
     font-size:14.5px;
   }
-  .esd-product-link:hover{background:#e2e9ec;}
+  .esd-product-link:hover{background:#f6f9fa; border-color:var(--forbo-navy);}
   .esd-product-link span.tag{
     font-weight:400;
     font-size:12.5px;
