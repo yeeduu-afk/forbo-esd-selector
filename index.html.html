@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESD Flooring Selector | Forbo</title>
+<style>
+  :root{
+    --forbo-navy:#23415a;
+    --forbo-navy-dark:#1a3145;
+    --forbo-bg:#EFF2F3;
+    --forbo-white:#ffffff;
+    --forbo-text:#23415a;
+    --forbo-muted:#5c7284;
+    --forbo-border:#d3dbe0;
+    --forbo-focus:#8fb3cc;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:"Myriad Pro","Myriad","Segoe UI",Helvetica,Arial,sans-serif;
+    background:var(--forbo-bg);
+    color:var(--forbo-text);
+  }
+  .esd-tool{
+    max-width:640px;
+    margin:0 auto;
+    background:var(--forbo-white);
+    border-radius:6px;
+    box-shadow:0 2px 14px rgba(35,65,90,0.10);
+    overflow:hidden;
+  }
+  .esd-header{
+    background:var(--forbo-navy);
+    color:var(--forbo-white);
+    padding:28px 32px 22px;
+  }
+  .esd-eyebrow{
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    font-size:11px;
+    font-weight:700;
+    color:#a9c2d3;
+    margin:0 0 6px;
+  }
+  .esd-header h1{
+    font-size:22px;
+    line-height:1.3;
+    margin:0 0 4px;
+    font-weight:600;
+  }
+  .esd-header p{
+    margin:0;
+    font-size:14px;
+    color:#c7d8e3;
+  }
+  .esd-progress{
+    display:flex;
+    gap:6px;
+    padding:18px 32px 0;
+  }
+  .esd-progress-step{
+    height:4px;
+    flex:1;
+    background:var(--forbo-border);
+    border-radius:2px;
+    overflow:hidden;
+  }
+  .esd-progress-step.active .esd-progress-fill,
+  .esd-progress-step.done .esd-progress-fill{
+    background:var(--forbo-navy);
+    height:100%;
+    width:100%;
+  }
+  .esd-progress-fill{width:0%;}
+  .esd-body{
+    padding:28px 32px 32px;
+  }
+  .esd-step-label{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--forbo-muted);
+    margin:0 0 10px;
+  }
+  .esd-question{
+    font-size:19px;
+    line-height:1.4;
+    font-weight:600;
+    margin:0 0 22px;
+    color:var(--forbo-navy);
+  }
+  .esd-options{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .esd-option{
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+    text-align:left;
+    width:100%;
+    background:var(--forbo-white);
+    border:1.5px solid var(--forbo-border);
+    border-radius:6px;
+    padding:16px 18px;
+    font-family:inherit;
+    font-size:15px;
+    color:var(--forbo-text);
+    cursor:pointer;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .esd-option:hover{
+    border-color:var(--forbo-navy);
+    background:#f6f9fa;
+  }
+  .esd-option:focus-visible{
+    outline:3px solid var(--forbo-focus);
+    outline-offset:1px;
+  }
+  .esd-option-title{
+    font-weight:700;
+    display:block;
+    margin-bottom:2px;
+  }
+  .esd-option-sub{
+    display:block;
+    font-size:13px;
+    color:var(--forbo-muted);
+    font-weight:400;
+  }
+  .esd-option-arrow{
+    margin-left:auto;
+    color:var(--forbo-muted);
+    font-size:18px;
+    flex-shrink:0;
+  }
+  .esd-note{
+    margin-top:20px;
+    font-size:12.5px;
+    color:var(--forbo-muted);
+    line-height:1.5;
+    border-top:1px solid var(--forbo-border);
+    padding-top:14px;
+  }
+  .esd-back{
+    background:none;
+    border:none;
+    color:var(--forbo-muted);
+    font-family:inherit;
+    font-size:13px;
+    cursor:pointer;
+    padding:0 0 18px;
+    display:flex;
+    align-items:center;
+    gap:5px;
+  }
+  .esd-back:hover{color:var(--forbo-navy);}
+
+  /* Result screen */
+  .esd-result-tag{
+    display:inline-block;
+    background:#e8eef1;
+    color:var(--forbo-navy);
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:5px 11px;
+    border-radius:20px;
+    margin-bottom:14px;
+  }
+  .esd-result-tag.caution{
+    background:#fbeee0;
+    color:#8a4a12;
+  }
+  .esd-result h2{
+    font-size:21px;
+    margin:0 0 10px;
+    color:var(--forbo-navy);
+    font-weight:700;
+  }
+  .esd-result p{
+    font-size:15px;
+    line-height:1.6;
+    color:var(--forbo-text);
+    margin:0 0 18px;
+  }
+  .esd-product-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:22px;
+  }
+  .esd-product-link{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:var(--forbo-bg);
+    border:1px solid var(--forbo-border);
+    border-radius:6px;
+    padding:14px 16px;
+    text-decoration:none;
+    color:var(--forbo-navy);
+    font-weight:600;
+    font-size:14.5px;
+  }
+  .esd-product-link:hover{background:#e2e9ec;}
+  .esd-product-link span.tag{
+    font-weight:400;
+    font-size:12.5px;
+    color:var(--forbo-muted);
+  }
+  .esd-cta-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .esd-btn{
+    font-family:inherit;
+    font-size:14px;
+    font-weight:700;
+    padding:12px 20px;
+    border-radius:5px;
+    text-decoration:none;
+    text-align:center;
+    cursor:pointer;
+    border:1.5px solid var(--forbo-navy);
+  }
+  .esd-btn-primary{
+    background:var(--forbo-navy);
+    color:var(--forbo-white);
+  }
+  .esd-btn-primary:hover{background:var(--forbo-navy-dark);}
+  .esd-btn-secondary{
+    background:transparent;
+    color:var(--forbo-navy);
+  }
+  .esd-btn-secondary:hover{background:#e8eef1;}
+  .esd-restart{
+    margin-top:22px;
+    background:none;
+    border:none;
+    font-family:inherit;
+    font-size:13px;
+    color:var(--forbo-muted);
+    cursor:pointer;
+    text-decoration:underline;
+  }
+  .esd-engineer-callout{
+    background:#fbeee0;
+    border:1px solid #eed3b3;
+    border-radius:6px;
+    padding:14px 16px;
+    font-size:13.5px;
+    color:#6d3c0f;
+    margin-bottom:20px;
+    line-height:1.5;
+  }
+  [data-esd-screen]{display:none;}
+  [data-esd-screen].active{display:block;}
+  @media (max-width:480px){
+    .esd-header{padding:22px 20px 18px;}
+    .esd-progress{padding:16px 20px 0;}
+    .esd-body{padding:22px 20px 26px;}
+    .esd-question{font-size:17px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="esd-tool">
+  <div class="esd-header">
+    <p class="esd-eyebrow">Forbo Flooring Systems</p>
+    <h1>Find the right ESD flooring system</h1>
+    <p>Answer three quick questions to identify whether your project needs standard, dissipative or conductive flooring.</p>
+  </div>
+
+  <div class="esd-progress" id="esdProgress">
+    <div class="esd-progress-step" data-step="1"><div class="esd-progress-fill"></div></div>
+    <div class="esd-progress-step" data-step="2"><div class="esd-progress-fill"></div></div>
+    <div class="esd-progress-step" data-step="3"><div class="esd-progress-fill"></div></div>
+  </div>
+
+  <div class="esd-body">
+
+    <!-- Q1 -->
+    <div data-esd-screen="q1" class="active">
+      <p class="esd-step-label">Question 1 of 3</p>
+      <p class="esd-question">Will people or equipment be generating or exposed to static in this space?</p>
+      <div class="esd-options">
+        <button class="esd-option" data-goto="result-standard">
+          <span>
+            <span class="esd-option-title">No, or low risk</span>
+            <span class="esd-option-sub">General office, retail or public space</span>
+          </span>
+          <span class="esd-option-arrow">→</span>
+        </button>
+        <button class="esd-option" data-goto="q2">
+          <span>
+            <span class="esd-option-title">Yes, or unsure</span>
+            <span class="esd-option-sub">Industrial, technical or healthcare environment</span>
+          </span>
+          <span class="esd-option-arrow">→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div data-esd-screen="q2">
+      <button class="esd-back" data-back="q1">← Back</button>
+      <p class="esd-step-label">Question 2 of 3</p>
+      <p class="esd-question">Does the floor need to be earthed (grounded)?</p>
+      <div class="esd-options">
+        <button class="esd-option" data-goto="result-standard">
+          <span>
+            <span class="esd-option-title">No — earthing isn't required</span>
+            <span class="esd-option-sub">Common for comms rooms &amp; standard IT rooms, even with electronics present</span>
+          </span>
+          <span class="esd-option-arrow">→</span>
+        </button>
+        <button class="esd-option" data-goto="q3">
+          <span>
+            <span class="esd-option-title">Yes — earthing is required</span>
+            <span class="esd-option-sub">Confirmed by the client's electrical engineer</span>
+          </span>
+          <span class="esd-option-arrow">→</span>
+        </button>
+        <button class="esd-option" data-goto="result-checkfirst">
+          <span>
+            <span class="esd-option-title">Not confirmed yet</span>
+            <span class="esd-option-sub">Check with the electrical engineer before specifying</span>
+          </span>
+          <span class="esd-option-arrow">→</span>
+        </button>
+      </div>
+      <p class="esd-note">Earthing requirement — not just the presence of electronics — is what determines whether ESD flooring is actually needed. A comms room full of IT equipment often doesn't need to be earthed, in which case standard antistatic flooring (any Forbo product) is sufficient.</p>
+    </div>
+
+    <!-- Q3 -->
+    <div data-esd-screen="q3">
+      <button class="esd-back" data-back="q2">← Back</button>
+      <p class="esd-step-label">Question 3 of 3</p>
+      <p class="esd-question">What resistance level does the equipment manufacturer specify?</p>
+      <div class="esd-options">
+        <button class="esd-option" data-goto="result-ec">
+          <span>
+            <span class="esd-option-title">Below 10⁶ Ω</span>
+            <span class="esd-option-sub">Conductive (EC) system required</span>
+          </span>
+          <span class="esd-option-arrow">→</span>
+        </button>
+        <button class="esd-option" data-goto="result-sd">
+          <span>
+            <span class="esd-option-title">10⁶ – 10⁹ Ω</span>
+            <span class="esd-option-sub">Static dissipative (SD) system required</span>
+          </span>
+          <span class="esd-option-arrow">→</span>
+        </button>
+        <button class="esd-option" data-goto="result-unsure">
+          <span>
+            <span class="esd-option-title">Not sure</span>
+            <span class="esd-option-sub">Manufacturer spec not yet confirmed</span>
+          </span>
+          <span class="esd-option-arrow">→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- RESULT: Standard -->
+    <div data-esd-screen="result-standard">
+      <span class="esd-result-tag">Standard antistatic</span>
+      <h2>Got a server room or comms room on the brief?</h2>
+      <p>Most standard comms rooms only require antistatic performance, meaning any Forbo floor works. Full ESD systems are typically reserved for high-availability datacentres where equipment sensitivity is formally specified. Always confirm and consult with the client or their electrical engineer before upgrading to a full system.</p>
+      <div class="esd-cta-row">
+        <a class="esd-btn esd-btn-primary" href="https://www.forbo.com/flooring/en-au/products/pexhpf" target="_blank" rel="noopener">Browse all flooring</a>
+        <a class="esd-btn esd-btn-secondary" href="https://www.forbo.com/flooring/en-au/sample-order/p5i0kk" target="_blank" rel="noopener">Order free samples</a>
+      </div>
+      <button class="esd-restart" data-restart="1">Start again</button>
+    </div>
+
+    <!-- RESULT: EC -->
+    <div data-esd-screen="result-ec">
+      <span class="esd-result-tag">Conductive (EC)</span>
+      <h2>Specify a conductive (EC) system</h2>
+      <p>Below 10⁶ Ω calls for a fully conductive floor — the strictest level of static control, typically used in semiconductor production, electronics manufacturing and ISO cleanrooms.</p>
+      <div class="esd-product-list">
+        <a class="esd-product-link" href="https://www.forbo.com/flooring/en-au/products/static-control-cleanroom-flooring/colorex-ec/bzyxz4" target="_blank" rel="noopener">Colorex EC <span class="tag">Tile · cleanroom-grade</span></a>
+        <a class="esd-product-link" href="https://www.forbo.com/flooring/en-au/products/static-control-cleanroom-flooring/sphera-ec/bvyfiq" target="_blank" rel="noopener">Sphera EC <span class="tag">Homogeneous sheet</span></a>
+      </div>
+      <div class="esd-cta-row">
+        <a class="esd-btn esd-btn-primary" href="https://www.forbo.com/flooring/en-au/contact-us/contact-form/p62if9" target="_blank" rel="noopener">Talk to a specifier</a>
+        <a class="esd-btn esd-btn-secondary" href="https://www.forbo.com/flooring/en-au/products/static-control-cleanroom-flooring/c8k5gv" target="_blank" rel="noopener">Compare all ESD ranges</a>
+      </div>
+      <button class="esd-restart" data-restart="1">Start again</button>
+    </div>
+
+    <!-- RESULT: SD -->
+    <div data-esd-screen="result-sd">
+      <span class="esd-result-tag">Dissipative (SD)</span>
+      <h2>Specify a static dissipative (SD) system</h2>
+      <p>10⁶–10⁹ Ω is typical for pharmaceutical labs, MedTech, healthcare and operating theatres, and data centres — protecting sensitive equipment and personnel without full conductivity.</p>
+      <div class="esd-product-list">
+        <a class="esd-product-link" href="https://www.forbo.com/flooring/en-au/products/static-control-cleanroom-flooring/colorex-sd/bhbe30" target="_blank" rel="noopener">Colorex SD <span class="tag">Tile · high-traffic</span></a>
+        <a class="esd-product-link" href="https://www.forbo.com/flooring/en-au/products/static-control-cleanroom-flooring/sphera-sd/bmp0sl" target="_blank" rel="noopener">Sphera SD <span class="tag">Homogeneous sheet</span></a>
+        <a class="esd-product-link" href="https://www.forbo.com/flooring/en-au/products/static-control-cleanroom-flooring/marmoleum-ohmex/btbswt" target="_blank" rel="noopener">Marmoleum Ohmex <span class="tag">Natural linoleum</span></a>
+      </div>
+      <div class="esd-cta-row">
+        <a class="esd-btn esd-btn-primary" href="https://www.forbo.com/flooring/en-au/contact-us/contact-form/p62if9" target="_blank" rel="noopener">Talk to a specifier</a>
+        <a class="esd-btn esd-btn-secondary" href="https://www.forbo.com/flooring/en-au/products/static-control-cleanroom-flooring/c8k5gv" target="_blank" rel="noopener">Compare all ESD ranges</a>
+      </div>
+      <button class="esd-restart" data-restart="1">Start again</button>
+    </div>
+
+    <!-- RESULT: Check earthing first -->
+    <div data-esd-screen="result-checkfirst">
+      <span class="esd-result-tag caution">Confirm before specifying</span>
+      <h2>Check the earthing requirement first</h2>
+      <div class="esd-engineer-callout">
+        Whether this floor needs ESD performance comes down to one question: does it need to be <strong>earthed</strong>? Ask the client's electrical engineer directly — "does this floor need to be earthed?" A "no" means standard antistatic flooring (any Forbo product) is sufficient; a "yes" means a conductive (EC) or dissipative (SD) system is needed, and the exact resistance value will determine which.
+      </div>
+      <div class="esd-cta-row">
+        <button class="esd-btn esd-btn-primary" data-goto="q3">Earthing confirmed — continue</button>
+        <a class="esd-btn esd-btn-secondary" href="https://www.forbo.com/flooring/en-au/contact-us/contact-form/p62if9" target="_blank" rel="noopener">Talk to a specifier</a>
+      </div>
+      <button class="esd-restart" data-restart="1">Start again</button>
+    </div>
+
+    <!-- RESULT: Unsure -->
+    <div data-esd-screen="result-unsure">
+      <span class="esd-result-tag caution">Confirm before specifying</span>
+      <h2>Check the required resistance level first</h2>
+      <div class="esd-engineer-callout">
+        The right product depends on the exact resistance value (Ω) required. Confirm this with the client's electrical engineer or the equipment manufacturer before specifying — conductive (EC) and dissipative (SD) systems are not interchangeable.
+      </div>
+      <p>In the meantime, here's how the two categories generally apply:</p>
+      <div class="esd-product-list">
+        <a class="esd-product-link" href="https://www.forbo.com/flooring/en-au/products/static-control-cleanroom-flooring/colorex-ec/bzyxz4" target="_blank" rel="noopener">EC (Conductive) <span class="tag">Below 10⁶ Ω</span></a>
+        <a class="esd-product-link" href="https://www.forbo.com/flooring/en-au/products/static-control-cleanroom-flooring/colorex-sd/bhbe30" target="_blank" rel="noopener">SD (Dissipative) <span class="tag">10⁶–10⁹ Ω</span></a>
+      </div>
+      <div class="esd-cta-row">
+        <a class="esd-btn esd-btn-primary" href="https://www.forbo.com/flooring/en-au/contact-us/contact-form/p62if9" target="_blank" rel="noopener">Talk to a specifier</a>
+        <a class="esd-btn esd-btn-secondary" href="https://www.forbo.com/flooring/en-au/products/static-control-cleanroom-flooring/c8k5gv" target="_blank" rel="noopener">Compare all ESD ranges</a>
+      </div>
+      <button class="esd-restart" data-restart="1">Start again</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  var screens = document.querySelectorAll('[data-esd-screen]');
+  var progressSteps = document.querySelectorAll('.esd-progress-step');
+  var history = ['q1'];
+
+  var stepIndex = { q1:1, q2:2, q3:3 };
+
+  function show(id){
+    screens.forEach(function(s){
+      s.classList.toggle('active', s.getAttribute('data-esd-screen') === id);
+    });
+    updateProgress(id);
+    var tool = document.querySelector('.esd-tool');
+    if (tool) tool.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  function updateProgress(id){
+    var current = stepIndex[id] || 3; // results count as step 3 filled
+    progressSteps.forEach(function(step){
+      var n = parseInt(step.getAttribute('data-step'), 10);
+      step.classList.toggle('done', n < current);
+      step.classList.toggle('active', n <= current);
+    });
+  }
+
+  document.querySelectorAll('[data-goto]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var target = btn.getAttribute('data-goto');
+      history.push(target);
+      show(target);
+    });
+  });
+
+  document.querySelectorAll('[data-back]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var target = btn.getAttribute('data-back');
+      show(target);
+    });
+  });
+
+  document.querySelectorAll('[data-restart]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      history = ['q1'];
+      show('q1');
+    });
+  });
+
+  show('q1');
+})();
+</script>
+
+</body>
+</html>
