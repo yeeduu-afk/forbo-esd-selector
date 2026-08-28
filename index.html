@@ -16,15 +16,23 @@
     --forbo-focus:#8fb3cc;
   }
   *{box-sizing:border-box;}
+  html, body{
+    height:100%;
+  }
   body{
     margin:0;
     font-family:"Myriad Pro","Myriad","Segoe UI",Helvetica,Arial,sans-serif;
     background:transparent;
     color:var(--forbo-text);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:24px 16px;
   }
   .esd-tool{
     max-width:640px;
-    margin:0 auto;
+    width:100%;
+    margin:0;
     background:var(--forbo-white);
     border:1px solid var(--forbo-border);
     border-radius:6px;
@@ -85,7 +93,7 @@
     margin:0 0 10px;
   }
   .esd-question{
-    font-size:19px;
+    font-size:21px;
     line-height:1.4;
     font-weight:600;
     margin:0 0 22px;
@@ -107,7 +115,7 @@
     border-radius:6px;
     padding:16px 18px;
     font-family:inherit;
-    font-size:15px;
+    font-size:16px;
     color:var(--forbo-text);
     cursor:pointer;
     transition:border-color .15s ease, background .15s ease;
@@ -127,7 +135,7 @@
   }
   .esd-option-sub{
     display:block;
-    font-size:13px;
+    font-size:14px;
     color:var(--forbo-muted);
     font-weight:400;
   }
