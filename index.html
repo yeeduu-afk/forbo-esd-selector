@@ -1,3 +1,16 @@
+// Prevent iframe from scrolling parent page on load
+if (window.self !== window.top) {
+  // We're inside an iframe
+  // Block any scroll-related postMessages to parent
+  const originalPostMessage = window.parent.postMessage.bind(window.parent);
+  window.postMessage = function(message, targetOrigin) {
+    // Only block scroll-related messages
+    if (message && (message.type === 'scroll' || message.scrollTop !== undefined)) {
+      return;
+    }
+    originalPostMessage(message, targetOrigin);
+  };
+}
 <!DOCTYPE html>
 <html lang="en-AU">
 <head>
